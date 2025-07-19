@@ -1,0 +1,19 @@
+package clientorders;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+public class ChildOrderReaderTest {
+
+    @Test
+    public void testReadChildOrders() throws Exception {
+        List<ChildOrder> children = ChildOrderReader.readChildOrders("child_orders.csv");
+        assertNotNull(children);
+        assertFalse(children.isEmpty());
+
+        ChildOrder ch = children.get(0);
+        assertNotNull(ch.getId());
+        assertTrue(ch.getQuantity() > 0);
+    }
+}
