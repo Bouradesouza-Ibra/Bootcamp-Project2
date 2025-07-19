@@ -1,0 +1,19 @@
+package clientorders;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.util.List;
+
+public class ClientOrderReaderTest {
+
+    @Test
+    public void testReadClientOrders() {
+        try {
+            List<ClientOrder> orders = ClientOrderReader.readClientOrders("client_orders.csv");
+            assertNotNull(orders);
+            assertTrue(orders.size() > 0);
+        } catch (Exception e) {
+            fail("Reading client orders failed: " + e.getMessage());
+        }
+    }
+}
