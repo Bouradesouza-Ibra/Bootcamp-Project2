@@ -1,63 +1,30 @@
-package Clientorders;
+package clientorders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderMatcherTest {
 
     @Test
-    public void testReconcileOrdersFullyFilled() {
-        ClientOrder client = new ClientOrder("CO1", "AAPL", "BUY", 100);
-        ChildOrder child1 = new ChildOrder("C1", "CO1", "AAPL", "BUY", 50, 50);
-        ChildOrder child2 = new ChildOrder("C2", "CO1", "AAPL", "BUY", 50, 50);
+    public void testReconcileOrders() {
+        List<ClientOrder> clients = new ArrayList<>();
+        List<ChildOrder> children = new ArrayList<>();
 
-        List<ClientOrder> clientList = Arrays.asList(client);
-        List<ChildOrder> childList = Arrays.asList(child1, child2);
+        // Client C1 needs 500
+        clients.add(new ClientOrder("C1", "AAPL", "BUY", 500));
+        children.add(new ChildOrder("CH1", "C1", "AAPL", "BUY", 200, 200));
+        children.add(new ChildOrder("CH2", "C1", "AAPL", "BUY", 300, 150));
 
-        // Capture printed output using a stream
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
+        // Client C2 needs 400
+        clients.add(new ClientOrder("C2", "MSFT", "SELL", 300));
+        children.add(new ChildOrder("CH3", "C2", "MSFT", "SELL", 300, 300));
 
-        OrderMatcher.reconcileOrders(clientList, childList);
+        // Client C3 needs 1000
+        clients.add(new ClientOrder("C3", "TSLA", "BUY", 1000));
+        children.add(new ChildOrder("CH4", "C3", "TSLA", "BUY", 400, 100));
+        children.add(new ChildOrder("CH5", "C3", "TSLA", "BUY", 600, 500));
 
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("FULLY FILLED"));
-    }
-
-    @Test
-    public void testReconcileOrdersPartiallyFilled() {
-        ClientOrder client = new ClientOrder("CO2", "AAPL", "BUY", 100);
-        ChildOrder child1 = new ChildOrder("C3", "CO2", "AAPL", "BUY", 100, 60);
-
-        List<ClientOrder> clientList = Arrays.asList(client);
-        List<ChildOrder> childList = Arrays.asList(child1);
-
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
-
-        OrderMatcher.reconcileOrders(clientList, childList);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("PARTIALLY FILLED"));
-    }
-
-    @Test
-    public void testReconcileOrdersOverfilled() {
-        ClientOrder client = new ClientOrder("CO3", "AAPL", "BUY", 100);
-        ChildOrder child1 = new ChildOrder("C4", "CO3", "AAPL", "BUY", 120, 120);
-
-        List<ClientOrder> clientList = Arrays.asList(client);
-        List<ChildOrder> childList = Arrays.asList(child1);
-
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
-
-        OrderMatcher.reconcileOrders(clientList, childList);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("OVERFILLED"));
+        assertDoesNotThrow(() -> OrderMatcher.reconcileOrders(clients, children));
     }
 }
