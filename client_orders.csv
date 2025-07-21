@@ -1,0 +1,4 @@
+client_order_id	symbol	side	quantity
+C1	AAPL	BUY	500
+C2	MSFT	SELL	300
+C3	TSLA	BUY	1000
