@@ -1,0 +1,6 @@
+child_order_id	parent_id	symbol	side	quantity	filled_quantity
+CH1	C1	AAPL	BUY	200	200
+CH2	C1	AAPL	BUY	300	150
+CH3	C2	MSFT	SELL	300	300
+CH4	C3	TSLA	BUY	400	100
+CH5	C3	TSLA	BUY	600	500
